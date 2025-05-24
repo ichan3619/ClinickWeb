@@ -1,0 +1,151 @@
+/* Stylesheet/docDash.css */
+body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      background-color: #ffffff;
+    }
+
+.sidebar {
+      background-color: #00a9c9;
+      width: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      height: 100vh; 
+    }
+
+
+/* NEW/MODIFIED: Styles for icons within the sidebar */
+.sidebar .icon {
+    /* color: white; /* Usually set by FontAwesome or specific icon styles */
+    cursor: pointer;
+    width: 50px;   /* Increased width to better match typical icon usability */
+    height: 50px;  /* Increased height */
+    padding: 10px; /* Padding around the icon itself if needed */
+    margin-top: 15px;
+    border-radius: 10px; /* */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease-in-out; /* Smooth hover transition */
+}
+
+.sidebar .icon:hover {
+    background-color: #2cdcff; /* */
+}
+
+/* You can use FontAwesome classes directly on <i> tags for the icons.
+   Example: <i class="fa-solid fa-home fa-2x" style="color: #ffffff;"></i>
+   The fa-2x (or fa-lg, fa-xl) will control the icon size.
+   The style="color: #ffffff;" will set the icon color.
+*/
+
+/* Placeholder styling if you just want empty spots for now */
+.sidebar .icon.placeholder::before {
+    content: ""; /* Empty content */
+    display: block;
+    width: 28px; /* Visual size of the placeholder */
+    height: 28px;
+    background-color: rgba(255, 255, 255, 0.3); /* Dim white square */
+    border-radius: 4px;
+}
+/* END OF NEW/MODIFIED STYLES */
+
+
+.main {
+    /* Adjusted margin-left to account for fixed sidebar */
+    margin-left: 80px; /* */
+    /* Removed right margin 0px as it's not standard */
+    padding: 20px; /* Simplified padding */
+    padding-top: 80px; /* Added padding-top to account for fixed nav height */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: calc(100vh - 80px); /* Calculate min-height considering nav */
+    background-color: white;
+    box-sizing: border-box;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    position: fixed; /* */
+    top: 0;
+    left: 100px; /* Align with the right edge of the sidebar */
+    right: 0;
+    height: 50px; /* Define a height for the nav bar */
+    z-index: 1000; /* */
+    background-color: white; /* */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: add a subtle shadow */
+    align-items: center; /* Vertically align nav items */
+    box-sizing: border-box;
+}
+
+nav a {
+    text-decoration: none;
+    color: black; /* */
+    font-weight: bold; /* */
+    padding: 5px 0; /* Added padding for better click area and visual */
+    border-bottom: 2px solid transparent; /* */
+}
+
+nav a.active {
+    border-bottom: 2px solid black; /* */
+}
+
+#profile {
+    position: absolute; /* */
+    top: 15px; /* Adjusted for nav height */
+    right: 20px; /* Adjusted for consistency */
+    font-size: 24px; /* */
+    cursor: pointer; /* */
+    /* Ensure profile icon is on top of nav content if overlapping */
+    z-index: 1001;
+}
+
+.left-panel {
+    display: flex; /* */
+    flex-direction: column; /* */
+    gap: 20px; /* */
+    width: calc(60% - 10px); /* Adjusted for responsiveness, can be changed */
+    /* width: 200px; /* */ /* Original fixed width commented out */
+}
+
+.right-panel {
+    width: calc(40% - 10px); /* Adjusted for responsiveness, can be changed */
+    /* width: 200px; /* */ /* Original fixed width commented out */
+}
+
+.card {
+    background-color: white; /* */
+    padding: 20px; /* */
+    /* margin-left: 80px; /* */ /* This seems incorrect as panels are already in .main */
+    border-radius: 4px; /* */
+    color: #7c7c7c; /* */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); /* Added subtle shadow */
+}
+
+.card h3 {
+    color: #4a4a4a; /* */
+    margin-top: 0; /* */
+}
+
+/* Responsive adjustments for panels */
+@media (max-width: 768px) {
+    .main {
+        flex-direction: column;
+        padding-top: 70px; /* Adjust if nav wraps or changes height */
+    }
+    .left-panel, .right-panel {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .right-panel {
+        margin-bottom: 0;
+    }
+    
+}

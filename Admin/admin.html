@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - Clinick</title>
+    <link rel="stylesheet" href="../Stylesheet/admin.css">
+    <style>
+        /* Styles for "Add New Role" form */
+        .inline-form {
+            display: flex;
+            align-items: flex-end; /* Aligns items to the bottom */
+            gap: 10px; /* Space between input and button */
+            margin-bottom: 20px; /* Space below the form */
+        }
+        .form-group-inline {
+            flex-grow: 1; /* Allows the input group to take available space */
+        }
+        .inline-input-small {
+            width: 100%; /* Takes full width of its container */
+            max-width: 280px; /* Adjusted width for the input field */
+            padding: 8px 10px; /* Inherited */
+            margin-bottom: 0; /* Remove default margin-bottom if input has one */
+            box-sizing: border-box; /* Ensure padding doesn't add to width */
+        }
+        .inline-button {
+            /* Padding and other styles inherited from general button styles */
+            white-space: nowrap; /* Prevent button text from wrapping */
+            height: 37px; /* Match typical input height with padding */
+        }
+        .sr-only { /* For visually hiding labels but keeping them for accessibility */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Styles for side-by-side tables */
+        .tables-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Allow tables to wrap on smaller screens */
+            gap: 20px; /* Space between the tables */
+            width: 100%;
+        }
+        .table-container-half {
+            flex: 1; /* Each table container tries to take equal space */
+            min-width: 320px; /* Minimum width before stacking - adjust as needed */
+            background-color: #f8f9fa; /* Ensure containers have background if section doesn't */
+            padding: 15px; /* Add some padding inside each half */
+            border-radius: 6px; /* Optional: rounded corners for these containers */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Optional: subtle shadow */
+        }
+        .table-container-half h3 { /* Adjust heading margin if needed inside new container */
+            margin-top: 0;
+        }
+
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 860px) { /* Adjusted breakpoint */
+            .inline-form {
+                flex-direction: column;
+                align-items: stretch; /* Make items full width */
+            }
+            .inline-input-small {
+                max-width: 100%; /* Full width on small screens */
+                margin-bottom: 10px; /* Add space when stacked */
+            }
+            .inline-button {
+                width: 100%;
+            }
+            .tables-wrapper {
+                flex-direction: column; /* Stack tables vertically */
+            }
+            .table-container-half {
+                flex-basis: 100%; /* Each table takes full width when stacked */
+                min-width: 100%;
+                margin-bottom: 20px; /* Space when stacked */
+            }
+            .table-container-half:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        /* Ensure action buttons in tables have enough space */
+        #pendingRolesTable td:last-child button,
+        #rolesTable td:last-child button {
+            margin-right: 5px;
+            margin-bottom: 5px; /* Add a little space if they wrap */
+        }
+        #pendingRolesTable td:last-child button:last-child,
+        #rolesTable td:last-child button:last-child {
+            margin-right: 0;
+        }
+        /* Make action column wider if necessary */
+        #pendingRolesTable td:last-child, #rolesTable td:last-child {
+            min-width: 150px; /* Adjusted for two buttons */
+        }
+    </style>
+</head>
+    <a href="../Login/logout.php">Logout</a>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <h2>Admin Menu</h2>
+            <nav>
+                <ul>
+                    <li><a href="#departments-section" class="nav-link active" data-section="departments-section">Departments</a></li>
+                    <li><a href="#campus-section" class="nav-link" data-section="campus-section">Campuses</a></li>
+                    <li><a href="#roles-section" class="nav-link" data-section="roles-section">Roles</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="top-bar">
+                <h1 id="main-heading">Admin Settings</h1>
+                </div>
+
+            <div id="globalMessageArea" style="margin-bottom: 15px;"></div>
+
+            <section id="departments-section" class="settings-section">
+                <h2>Manage Departments</h2>
+                <div class="form-container">
+                    <h3>Add New Department</h3>
+                    <form id="addDepartmentForm">
+                        <label for="newDeptName">Department Name:</label>
+                        <input type="text" id="newDeptName" name="deptName" required>
+                        <button type="submit">Add Department</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <h3>Existing Departments</h3>
+                    <table id="departmentsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="campus-section" class="settings-section hidden">
+                <h2>Manage Campuses</h2>
+                <div class="form-container">
+                    <h3>Add New Campus</h3>
+                    <form id="addCampusForm">
+                        <label for="newCampusName">Campus Name:</label>
+                        <input type="text" id="newCampusName" name="campusName" required>
+                        <button type="submit">Add Campus</button>
+                    </form>
+                </div>
+                <div class="table-container">
+                    <h3>Existing Campuses</h3>
+                    <table id="campusesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="roles-section" class="settings-section hidden">
+                <h2>Manage Roles & Approvals</h2> <div class="form-container">
+                    <h3>Add New Role Definition</h3> <form id="addRoleForm" class="inline-form">
+                        <div class="form-group-inline">
+                            <label for="newRoleName" class="sr-only">Role Name:</label>
+                            <input type="text" id="newRoleName" name="roleName" placeholder="Enter new role name" required class="inline-input-small">
+                        </div>
+                        <button type="submit" class="inline-button">Add Role</button>
+                    </form>
+                    </div>
+
+                <div class="tables-wrapper">
+                    <div class="table-container table-container-half">
+                        <h3>Existing Role Definitions</h3> <table id="rolesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-container table-container-half">
+                        <h3>Pending Role Approvals</h3>
+                        <div id="pendingRolesMessageArea" style="margin-bottom: 10px;"></div>
+                        <table id="pendingRolesTable">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Requested Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                </section>
+        </main>
+    </div>
+
+    <div id="editDepartmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-modal="editDepartmentModal">&times;</span> <h3>Edit Department</h3>
+            <form id="editDepartmentForm">
+                <input type="hidden" id="editDeptID" name="deptID">
+                <label for="editDeptNameInput">Department Name:</label>
+                <input type="text" id="editDeptNameInput" name="deptName" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editCampusModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" data-modal="editCampusModal">&times;</span> <h3>Edit Campus</h3>
+            <form id="editCampusForm">
+                <input type="hidden" id="editCampusID" name="campusID">
+                <label for="editCampusNameInput">Campus Name:</label>
+                <input type="text" id="editCampusNameInput" name="campusName" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editRoleModal" class="modal"> <div class="modal-content">
+            <span class="close-btn" data-modal="editRoleModal">&times;</span> <h3>Edit Role Definition</h3>
+            <form id="editRoleForm">
+                <input type="hidden" id="editRoleID" name="roleID">
+                <label for="editRoleNameInput">Role Name:</label>
+                <input type="text" id="editRoleNameInput" name="roleName" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const PHP_API_URL = 'adminFunctions.php';
+
+        function escapeHtml(unsafe) {
+            if (unsafe === null || typeof unsafe === 'undefined') return '';
+            return unsafe.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+        const sections = document.querySelectorAll('.settings-section');
+        const globalMessageArea = document.getElementById('globalMessageArea');
+        const mainHeading = document.getElementById('main-heading');
+
+        const pendingRolesTableBody = document.querySelector('#pendingRolesTable tbody');
+        const pendingRolesMessageArea = document.getElementById('pendingRolesMessageArea');
+
+        function updateMainHeading(sectionId) {
+            let headingText = "Admin Settings";
+            if (sectionId === 'departments-section') headingText = "Manage Departments";
+            else if (sectionId === 'campus-section') headingText = "Manage Campuses";
+            else if (sectionId === 'roles-section') headingText = "Manage Roles & Approvals"; // Updated heading
+            mainHeading.textContent = headingText;
+        }
+
+        function showSection(sectionId) {
+            sections.forEach(section => section.classList.toggle('hidden', section.id !== sectionId));
+            navLinks.forEach(link => link.classList.toggle('active', link.dataset.section === sectionId));
+            updateMainHeading(sectionId);
+            globalMessageArea.innerHTML = ''; 
+            if(pendingRolesMessageArea) pendingRolesMessageArea.innerHTML = ''; 
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const sectionId = this.dataset.section;
+                showSection(sectionId);
+                if (sectionId === 'departments-section') loadDepartments();
+                else if (sectionId === 'campus-section') loadCampuses();
+                else if (sectionId === 'roles-section') {
+                    loadRoles();
+                    loadPendingRoleAssignments(); 
+                }
+            });
+        });
+
+        function showMessage(message, type = 'info', area = globalMessageArea, duration = 5000) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `alert alert-${type}`;
+            messageDiv.textContent = message;
+            if (area) { // Check if area is valid
+                area.innerHTML = ''; 
+                area.appendChild(messageDiv);
+                if (duration) setTimeout(() => { if (messageDiv.parentNode === area) area.innerHTML = ''; }, duration);
+            } else { // Fallback to global if specific area not found
+                globalMessageArea.innerHTML = '';
+                globalMessageArea.appendChild(messageDiv);
+                 if (duration) setTimeout(() => { if (messageDiv.parentNode === globalMessageArea) globalMessageArea.innerHTML = ''; }, duration);
+            }
+        }
+
+        const modals = document.querySelectorAll('.modal');
+        const closeButtons = document.querySelectorAll('.close-btn');
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                const modalMessageArea = modal.querySelector('.modal-message-area');
+                if(modalMessageArea) modalMessageArea.innerHTML = '';
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) modal.style.display = 'none';
+        }
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() { closeModal(this.dataset.modal); });
+        });
+
+        window.addEventListener('click', function(event) {
+            modals.forEach(modal => { if (event.target == modal) closeModal(modal.id); });
+        });
+
+        async function fetchData(action, sectionTableBody, noDataMessage, itemName) {
+            // For existing tables (departments, campuses, role definitions)
+            // Determine column count for 'noDataMessage' colspan dynamically or pass it.
+            // For simplicity, assuming 3 columns for these original tables.
+            const colspanCount = (itemName === 'department' || itemName === 'campus' || itemName === 'role') ? 3 : 4; // Default to 4 if not specified
+            try {
+                const response = await fetch(`${PHP_API_URL}?action=${action}`);
+                const result = await response.json();
+                sectionTableBody.innerHTML = '';
+                if (result.status === 'success') {
+                    if (result.data.length === 0) {
+                         sectionTableBody.innerHTML = `<tr><td colspan="${colspanCount}">${noDataMessage}</td></tr>`; return [];
+                    }
+                    result.data.forEach(item => {
+                        const row = sectionTableBody.insertRow();
+                        const idField = itemName === 'department' ? 'deptID' : (itemName === 'campus' ? 'campusID' : 'roleID');
+                        const nameField = itemName === 'department' ? 'deptName' : (itemName === 'campus' ? 'campusName' : 'roleName');
+                        row.innerHTML = `
+                            <td>${escapeHtml(item[idField])}</td>
+                            <td>${escapeHtml(item[nameField])}</td>
+                            <td>
+                                <button class="action-btn edit-btn" data-id="${escapeHtml(item[idField])}" data-name="${escapeHtml(item[nameField])}">Edit</button>
+                                <button class="action-btn delete-btn" data-id="${escapeHtml(item[idField])}">Delete</button>
+                            </td>`;
+                    });
+                    return result.data;
+                } else { 
+                    const messageTargetArea = sectionTableBody.closest('.table-container')?.querySelector('div:first-child[id$="MessageArea"]') || sectionTableBody.closest('.table-container') || globalMessageArea;
+                    showMessage(`Error loading ${itemName}s: ` + escapeHtml(result.message), 'danger', messageTargetArea, null); 
+                }
+            } catch (error) {
+                console.error(`Error loading ${itemName}s:`, error);
+                const messageTargetArea = sectionTableBody.closest('.table-container')?.querySelector('div:first-child[id$="MessageArea"]') || sectionTableBody.closest('.table-container') || globalMessageArea;
+                showMessage(`Network or server error loading ${itemName}s.`, 'danger', messageTargetArea, null);
+            }
+            return [];
+        }
+
+        async function addItem(action, formData, formElement, successCallback, itemName) {
+            try {
+                const response = await fetch(`${PHP_API_URL}?action=${action}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showMessage(result.message, 'success');
+                    if(formElement) formElement.reset();
+                    if(successCallback) successCallback();
+                } else { showMessage('Error: ' + escapeHtml(result.message), 'danger'); }
+            } catch (error) {
+                console.error(`Error adding ${itemName}:`, error);
+                showMessage(`Network or server error adding ${itemName}.`, 'danger');
+            }
+        }
+
+        async function updateItem(action, formData, modalId, successCallback, itemName) {
+            try {
+                const response = await fetch(`${PHP_API_URL}?action=${action}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+                const modal = document.getElementById(modalId);
+                const modalMessageTarget = modal ? modal.querySelector('.modal-content') : globalMessageArea; 
+
+                if (result.status === 'success') {
+                    showMessage(result.message, 'success', globalMessageArea); 
+                    if(modalId) closeModal(modalId);
+                    if(successCallback) successCallback();
+                } else { showMessage('Error: ' + escapeHtml(result.message), 'danger', modalMessageTarget || globalMessageArea, null); }
+            } catch (error) {
+                console.error(`Error updating ${itemName}:`, error);
+                showMessage(`Network or server error updating ${itemName}.`, 'danger', document.getElementById(modalId)?.querySelector('.modal-content') || globalMessageArea, null);
+            }
+        }
+
+        async function deleteItem(action, id, successCallback, itemName, idParamName) { // Added idParamName
+            try {
+                const idParam = idParamName || (itemName === 'department' ? 'deptID' : (itemName === 'campus' ? 'campusID' : 'roleID'));
+                const response = await fetch(`${PHP_API_URL}?action=${action}&${idParam}=${id}`, { method: 'POST' });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showMessage(result.message, 'success');
+                    if(successCallback) successCallback();
+                } else { showMessage('Error: ' + escapeHtml(result.message), 'danger'); }
+            } catch (error) {
+                console.error(`Error deleting ${itemName}:`, error);
+                showMessage(`Network or server error deleting ${itemName}.`, 'danger');
+            }
+        }
+
+        // Department Functions (existing)
+        const addDepartmentForm = document.getElementById('addDepartmentForm');
+        const departmentsTableBody = document.querySelector('#departmentsTable tbody');
+        const editDepartmentForm = document.getElementById('editDepartmentForm');
+        function loadDepartments() { fetchData('get_departments', departmentsTableBody, 'No departments found.', 'department');}
+        if (addDepartmentForm) addDepartmentForm.addEventListener('submit', function(e) { e.preventDefault(); addItem('add_department', { deptName: document.getElementById('newDeptName').value }, addDepartmentForm, loadDepartments, 'department'); });
+        if (departmentsTableBody) departmentsTableBody.addEventListener('click', function(e) {
+            const t = e.target;
+            if (t.classList.contains('edit-btn')) { document.getElementById('editDeptID').value = t.dataset.id; document.getElementById('editDeptNameInput').value = t.dataset.name; openModal('editDepartmentModal'); }
+            if (t.classList.contains('delete-btn')) if (confirm(`Delete department ID ${t.dataset.id}?`)) deleteItem('delete_department', t.dataset.id, loadDepartments, 'department', 'deptID');
+        });
+        if (editDepartmentForm) editDepartmentForm.addEventListener('submit', function(e) { e.preventDefault(); updateItem('update_department', { deptID: document.getElementById('editDeptID').value, deptName: document.getElementById('editDeptNameInput').value }, 'editDepartmentModal', loadDepartments, 'department'); });
+
+        // Campus Functions (existing)
+        const addCampusForm = document.getElementById('addCampusForm');
+        const campusesTableBody = document.querySelector('#campusesTable tbody');
+        const editCampusForm = document.getElementById('editCampusForm');
+        function loadCampuses() { fetchData('get_campuses', campusesTableBody, 'No campuses found.', 'campus'); }
+        if (addCampusForm) addCampusForm.addEventListener('submit', function(e) { e.preventDefault(); addItem('add_campus', { campusName: document.getElementById('newCampusName').value }, addCampusForm, loadCampuses, 'campus'); });
+        if (campusesTableBody) campusesTableBody.addEventListener('click', function(e) {
+            const t = e.target;
+            if (t.classList.contains('edit-btn')) { document.getElementById('editCampusID').value = t.dataset.id; document.getElementById('editCampusNameInput').value = t.dataset.name; openModal('editCampusModal'); }
+            if (t.classList.contains('delete-btn')) if (confirm(`Delete campus ID ${t.dataset.id}?`)) deleteItem('delete_campus', t.dataset.id, loadCampuses, 'campus', 'campusID');
+        });
+        if (editCampusForm) editCampusForm.addEventListener('submit', function(e) { e.preventDefault(); updateItem('update_campus', { campusID: document.getElementById('editCampusID').value, campusName: document.getElementById('editCampusNameInput').value }, 'editCampusModal', loadCampuses, 'campus'); });
+
+        // Role Definition Functions (existing)
+        const addRoleForm = document.getElementById('addRoleForm');
+        const rolesTableBody = document.querySelector('#rolesTable tbody'); 
+        const editRoleForm = document.getElementById('editRoleForm');
+        function loadRoles() { fetchData('get_roles', rolesTableBody, 'No role definitions found.', 'role');}
+        if (addRoleForm) addRoleForm.addEventListener('submit', function(e) { e.preventDefault(); addItem('add_role', { roleName: document.getElementById('newRoleName').value }, addRoleForm, loadRoles, 'role'); });
+        if (rolesTableBody) rolesTableBody.addEventListener('click', function(e) { 
+            const t = e.target;
+            if (t.classList.contains('edit-btn')) { document.getElementById('editRoleID').value = t.dataset.id; document.getElementById('editRoleNameInput').value = t.dataset.name; openModal('editRoleModal'); }
+            if (t.classList.contains('delete-btn')) if (confirm(`Delete role definition ID ${t.dataset.id}?`)) deleteItem('delete_role', t.dataset.id, loadRoles, 'role', 'roleID');
+        });
+        if (editRoleForm) editRoleForm.addEventListener('submit', function(e) { e.preventDefault(); updateItem('update_role', { roleID: document.getElementById('editRoleID').value, roleName: document.getElementById('editRoleNameInput').value }, 'editRoleModal', loadRoles, 'role'); });
+
+        // Function to load pending role assignments (updated for reject button)
+        async function loadPendingRoleAssignments() {
+            if (!pendingRolesTableBody) return; 
+            try {
+                const response = await fetch(`${PHP_API_URL}?action=get_pending_role_assignments`);
+                const result = await response.json();
+                pendingRolesTableBody.innerHTML = ''; 
+                if (pendingRolesMessageArea) pendingRolesMessageArea.innerHTML = '';
+
+                if (result.status === 'success') {
+                    if (result.data.length === 0) {
+                        pendingRolesTableBody.innerHTML = `<tr><td colspan="4">No pending role approvals found.</td></tr>`;
+                        return;
+                    }
+                    result.data.forEach(item => {
+                        const row = pendingRolesTableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${escapeHtml(item.fname)} ${escapeHtml(item.lname)}</td>
+                            <td>${escapeHtml(item.email)}</td>
+                            <td>${escapeHtml(item.roleName)}</td>
+                            <td>
+                                <button class="action-btn approve-role-btn edit-btn" data-id="${escapeHtml(item.uRolesID)}">Approve</button> <button class="action-btn reject-role-btn delete-btn" data-id="${escapeHtml(item.uRolesID)}">Reject</button> </td>`;
+                    });
+                } else {
+                    showMessage('Error loading pending approvals: ' + escapeHtml(result.message), 'danger', pendingRolesMessageArea || globalMessageArea, null);
+                }
+            } catch (error) {
+                console.error('Error loading pending role assignments:', error);
+                showMessage('Network or server error loading pending approvals.', 'danger', pendingRolesMessageArea || globalMessageArea, null);
+            }
+        }
+        
+        // Event listener for the pending roles table (updated for reject button)
+        if (pendingRolesTableBody) {
+            pendingRolesTableBody.addEventListener('click', async function(e) {
+                const target = e.target;
+                const uRolesID = target.dataset.id;
+
+                if (target.classList.contains('approve-role-btn')) {
+                    if (confirm(`Are you sure you want to approve role assignment ID ${uRolesID}?`)) {
+                        try {
+                            const formData = new FormData(); 
+                            formData.append('uRolesID', uRolesID);
+
+                            const response = await fetch(`${PHP_API_URL}?action=approve_role_assignment`, {
+                                method: 'POST',
+                                body: formData 
+                            });
+                            const result = await response.json();
+                            
+                            if (result.status === 'success') {
+                                showMessage(result.message, 'success', globalMessageArea); 
+                                loadPendingRoleAssignments(); 
+                            } else {
+                                showMessage('Approval Error: ' + escapeHtml(result.message), 'danger', pendingRolesMessageArea || globalMessageArea); 
+                            }
+                        } catch (error) {
+                            console.error('Error approving role assignment:', error);
+                            showMessage('Network or server error during approval.', 'danger', pendingRolesMessageArea || globalMessageArea);
+                        }
+                    }
+                } else if (target.classList.contains('reject-role-btn')) { // ADDED REJECT LOGIC
+                    if (confirm(`Are you sure you want to REJECT and DELETE role assignment ID ${uRolesID}? This cannot be undone.`)) {
+                        try {
+                            const formData = new FormData();
+                            formData.append('uRolesID', uRolesID);
+
+                            const response = await fetch(`${PHP_API_URL}?action=reject_role_assignment`, {
+                                method: 'POST',
+                                body: formData
+                            });
+                            const result = await response.json();
+
+                            if (result.status === 'success') {
+                                showMessage(result.message, 'success', globalMessageArea);
+                                loadPendingRoleAssignments(); // Refresh the list
+                            } else {
+                                showMessage('Rejection Error: ' + escapeHtml(result.message), 'danger', pendingRolesMessageArea || globalMessageArea);
+                            }
+                        } catch (error) {
+                            console.error('Error rejecting role assignment:', error);
+                            showMessage('Network or server error during rejection.', 'danger', pendingRolesMessageArea || globalMessageArea);
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initial Load
+        let initialSectionId = window.location.hash.substring(1);
+        if (!initialSectionId || !document.getElementById(initialSectionId)) initialSectionId = 'departments-section';
+        showSection(initialSectionId);
+        if (initialSectionId === 'departments-section') loadDepartments();
+        else if (initialSectionId === 'campus-section') loadCampuses();
+        else if (initialSectionId === 'roles-section') {
+             loadRoles();
+             loadPendingRoleAssignments(); 
+        }
+    });
+    </script>
+</body>
+</html>

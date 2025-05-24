@@ -1,0 +1,243 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  display: flex;
+}
+
+.main-content {
+  margin-left: 100px; /* to leave space for the sidebar */
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 80px;
+  background-color: #00a9c9;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+.sidebar i {    
+    width: 40px;
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 0;
+    border-radius: 10px;
+}
+
+  .sidebar i:hover{
+    background-color: #2cdcff;
+  }
+
+.sidebar a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+  }
+
+/* Top Navigation */
+.main-content h2:first-of-type {
+  margin-left: 0; /* or any value you want */
+  font-weight: bold;
+  color: #333;
+} 
+
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 80px;
+    right: 0;
+    z-index: 1000;
+    margin-bottom: 40px;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+  }
+  nav a.active {
+    border-bottom: 2px solid black;
+  }
+
+.report-btn {
+  background-color: #0099b8;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.header{
+    display: block;
+}
+/* Top right profile */
+#profile {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Main Content */
+.content {
+  flex: 1;
+  margin-left: 200px;
+  padding: 80px 40px 40px 40px; /* top padding for nav */
+  background-color: #fffbea;
+}
+
+h2 {
+    margin-top: 20px;
+    display: block;
+    margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 100px;
+}
+
+h2 strong {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+tbody {
+  display: block;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+
+thead {
+  background-color: #dcdcdc;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f8f8f8;
+}
+
+/* Status icons */
+.status-icons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 18px;
+}
+
+.status-icons .accept {
+  color: green;
+  cursor: pointer;
+}
+
+.status-icons .reject {
+  color: red;
+  cursor: pointer;
+}
+
+.header{
+    display: flex;
+    align-items: end;
+    align-self: center;
+}
+
+.deny{
+  color: red;
+  width: 25px;
+  cursor: pointer;
+  border-radius: 10%;
+}
+
+  .deny:hover{
+    color: white;
+    background-color: red;
+  }
+
+.approve{
+  color: green;
+  width: 25px;
+  cursor: pointer;
+  border-radius: 10%;
+}
+  .approve:hover{
+    color:white;
+    background-color: green;
+  }
+
+  /*Modal*/
+  #modalDetails h2 {
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-top: 20px;
+}
+
+#modalDetails p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 8px 0;
+  margin-left: 10px;
+}
+
+#modalDetails strong {
+  color: #222;
+}
+
+#modalDetails ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#modalDetails li {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-left: 4px solid #4CAF50;
+  border-radius: 4px;
+}
+
+#modalDetails em {
+  color: #888;
+  font-style: italic;
+}
+

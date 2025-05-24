@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+
+.sidebar {
+  width: 80px;
+  background-color: #00a9c9;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+.sidebar i {    
+    width: 40px;
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 0;
+    border-radius: 10px;
+}
+
+  .sidebar i:hover{
+    background-color: #2cdcff;
+  }
+
+.sidebar a{
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+  }
+
+/* Main Layout */
+.main {
+    margin-left: 100px;
+    padding: 20px;
+}
+
+/* Top Navigation */
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 80px; /* leave space for sidebar */
+    right: 0;
+    z-index: 1000;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+  }
+  nav a.active {
+    border-bottom: 2px solid black;
+  }
+
+/* Header Area */
+.appointments-container h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Table Styling */
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.appointments-table th, 
+.appointments-table td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.appointments-table th {
+    background-color: #d3d3d3;
+}
+
+.action-icons i {
+    /*margin-right: 8px;*/
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Generate Report */
+h2 + button, .generate-button {
+    background-color: #007a90;
+    color: white;
+    padding: 8px 12px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Profile icon */
+#profile {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Modal */
+/* Modal full-screen overlay */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0; /* shorthand for top: 0; right: 0; bottom: 0; left: 0 */
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+/* Modal box */
+.modal-content {
+  background-color: #fff;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  margin: 40px 0; /* spacing for scroll if content is tall */
+}
+
+#prescriptionForm .submit:hover{
+  background-color: black;
+}
+

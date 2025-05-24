@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 80px;
+    background-color: #00a9c9;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    margin: 20px 0;
+}
+
+.sidebar i {
+    font-size: px;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+.sidebar i:hover {
+    background-color: #2cdcff;
+}
+
+/* Main Content */
+.main {
+    margin-left: 80px; /* <-- Give space for sidebar */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Top Navigation */
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    background-color: #fff;
+    position: sticky; /* <-- Changed from fixed */
+    top: 0;
+    z-index: 100;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    border-bottom: 2px solid transparent;
+}
+
+nav a.active {
+    border-bottom: 2px solid black;
+}
+
+/* Profile icon */
+#profile {
+    position: fixed; /* <-- Fixed at corner */
+    top: 25px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Page content area */
+/* Page content area */
+.content {
+    flex: 1;
+    padding: 10px 20px 30px 20px; /* Increased top padding for navbar space */
+    background-color: #f9f9f9;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+}
+
+/* Inside .content, you can wrap the actual content with a max-width */
+.content-wrapper {
+    width: 100%;
+    max-width: 800px; /* Shrink the content */
+    background-color: #fff9f2; /* Optional if you want to separate */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+/* Consultation Card */
+.consultation-card {
+    background-color: #fff9f2;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.patient-info h2, .prescription h2 {
+    margin-bottom: 20px;
+}
+
+.patient-info p, .prescription p {
+    margin-bottom: 10px;
+}
+
+hr {
+    margin: 30px 0;
+}
+
+/* Remarks and Submit */
+.remarks {
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    resize: none;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.submit-btn {
+    margin-top: 20px;
+    background-color: #00a8c6;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #008aa3;
+}

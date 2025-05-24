@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Notifications</title>
+  <link rel="stylesheet" href="..//Stylesheet/Inv/Notif.css" />
+  <script src="https://kit.fontawesome.com/f543d9f8e5.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="icon" id="backBtn"><i class="fa-solid fa-arrow-left fa-2x" style="color: #ffffff;"></i></div>
+  </div>
+
+  <div class="main">
+    <div class="top-bar">
+      <h2>Inventory</h2>
+    </div>
+
+    <h3 style="margin-top: 20px; font-weight: bold;">Inventory Notifications</h3>
+
+    <div class="tables-container">
+      <div class="inventory-table">
+        <div class="table-title">Expiring Soon</div>
+        <div id="expiringSoonContent">Loading...</div>
+      </div>
+
+      <div class="inventory-table">
+        <div class="table-title">Low Stock Items</div>
+        <div id="lowItemsContent">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const lowItemsContent = document.getElementById("lowItemsContent");
+      const expiringSoonContent = document.getElementById("expiringSoonContent");
+
+      fetch('loadInv.php')
+        .then(response => response.json())
+        .then(data => {
+          const lowItems = [];
+          const expiringSoon = [];
+
+          const today = new Date();
+          const nextMonth = new Date();
+          nextMonth.setDate(today.getDate() + 30);
+
+          data.forEach(item => {
+            const quantity = parseInt(item.itemQuantity);
+            const category = item.invCategory.toLowerCase();
+            let lowStockThreshold = 0;
+
+            if (category === 'medicine') {
+              lowStockThreshold = 30;
+            } else if (category === 'medical supplies') {
+              lowStockThreshold = 15;
+            } else if (category === 'medical equipment') {
+              lowStockThreshold = 5;
+            }
+
+            // Check for Low stock
+            if (quantity <= lowStockThreshold) {
+              lowItems.push(item);
+            }
+
+            // Check for Near Expiry
+            const expiryDate = new Date(item.invExpiryDate);
+            if (expiryDate >= today && expiryDate <= nextMonth) {
+              const timeDiff = expiryDate.getTime() - today.getTime();
+              const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+              item.daysLeft = daysLeft; // attach days left to the item
+              expiringSoon.push(item);
+            }
+          });
+
+          // Sort lists
+          lowItems.sort((a, b) => b.itemQuantity - a.itemQuantity); // descending quantity
+          expiringSoon.sort((a, b) => a.daysLeft - b.daysLeft); // nearest expiration first
+
+          function generateTable(items, highlightType) {
+            if (items.length === 0) {
+              let message = '';
+              if (highlightType === 'low') {
+                message = 'All items are sufficiently stocked.';
+              } else if (highlightType === 'expiring') {
+                message = 'No upcoming expirations detected.';
+              }
+              return `<div style="padding:20px; text-align:center; color: #666;">${message}</div>`;
+            }
+
+            let table = `<table>
+                <thead>
+                  <tr>
+                    <th>Inventory No.</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Expiry Date</th>`;
+
+            if (highlightType === 'expiring') {
+              table += `<th>Days Left</th>`;
+            }
+
+            table += `</tr>
+                </thead>
+                <tbody>`;
+
+            items.forEach(item => {
+              let quantityClass = '';
+              let expiryClass = '';
+              let daysLeftDisplay = '';
+
+              if (highlightType === 'low' && parseInt(item.itemQuantity) !== 0) {
+                quantityClass = 'low-stock';
+              }
+              if (highlightType === 'expiring') {
+                expiryClass = 'expiring-soon';
+                const daysLeftClass = item.daysLeft <= 10 ? 'near-expiry-danger' : '';
+                daysLeftDisplay = `<td class="${daysLeftClass}">${item.daysLeft} day(s)</td>`;
+              }
+
+              table += `
+                <tr>
+                  <td>${item.invID}</td>
+                  <td>${item.invName}</td>
+                  <td>${item.invDescription}</td>
+                  <td>${item.invCategory}</td>
+                  <td class="${quantityClass}">${item.itemQuantity}</td>
+                  <td class="${expiryClass}">${item.invExpiryDate}</td>
+                  ${daysLeftDisplay}
+                </tr>`;
+            });
+
+            table += `</tbody></table>`;
+            return table;
+          }
+
+          expiringSoonContent.innerHTML = generateTable(expiringSoon, 'expiring');
+          lowItemsContent.innerHTML = generateTable(lowItems, 'low');
+        })
+        .catch(error => {
+          console.error('Error fetching inventory data:', error);
+          lowItemsContent.innerHTML = "Error loading data.";
+          expiringSoonContent.innerHTML = "Error loading data.";
+        });
+    });
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      window.history.back();
+    });
+
+  </script>
+</body>
+</html>

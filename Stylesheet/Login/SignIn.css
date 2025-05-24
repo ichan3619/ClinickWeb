@@ -1,0 +1,324 @@
+/* SignIn.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #0B2A53; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 1300px; /* Kept it wide */
+    min-height: 85vh; 
+    max-height: 98vh; 
+    background-color: #fff; 
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25); 
+    border-radius: 10px; 
+    overflow: hidden; 
+    margin: 20px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.form-pane {
+    width: 100%; 
+    padding: 20px 40px; 
+    overflow-y: auto; 
+    box-sizing: border-box;
+}
+
+.form-pane h2 {
+    text-align: center;
+    color: #0B2A53; 
+    font-size: 1.9rem; 
+    font-weight: bold;
+    margin-top: 10px; 
+    margin-bottom: 20px; 
+    border-bottom: 2px solid #0B2A53; 
+    padding-bottom: 10px; 
+}
+
+/* Styles for two main columns for form sections */
+.signup-form .form-main-columns-wrapper { /* Renamed for clarity */
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 30px; 
+    width: 100%; /* Ensure wrapper takes full width */
+}
+
+.signup-form .form-main-column { /* Renamed for clarity */
+    flex: 1; 
+    min-width: 300px; /* Minimum width before stacking */
+    display: flex;
+    flex-direction: column; /* Stack fieldsets within this column */
+}
+
+
+.signup-form fieldset { 
+    border: 1px solid #e0e0e0;
+    padding: 15px 20px;
+    margin-bottom: 20px; /* Space between fieldsets */
+    border-radius: 6px;
+    box-sizing: border-box; 
+}
+
+.signup-form legend { 
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #0B2A53;
+    padding: 0 10px;
+    margin-left: 5px;
+}
+
+/* Styles for rows of fields within a fieldset */
+.signup-form .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+    margin-bottom: 10px; 
+}
+
+.signup-form .form-group {
+    flex: 1; 
+    min-width: calc(50% - 10px); /* For two fields side-by-side in a form-row */
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-form .form-row .form-group:only-child { 
+    min-width: 100%; /* A single field in a form-row takes full width */
+}
+
+
+.signup-form label {
+    display: block;
+    margin-bottom: 5px; 
+    font-weight: bold;
+    font-size: 0.8rem; 
+    color: #333; 
+}
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"],
+.signup-form input[type="date"],
+.signup-form select {
+    width: 100%;
+    padding: 9px 12px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.85rem; 
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.signup-form input[type="text"]:focus,
+.signup-form input[type="email"]:focus,
+.signup-form input[type="password"]:focus,
+.signup-form input[type="date"]:focus,
+.signup-form select:focus {
+    border-color: #0B2A53; 
+    box-shadow: 0 0 0 2px rgba(11, 42, 83, 0.2); 
+    outline: none;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input[type="password"] {
+    padding-right: 35px; 
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #757575;
+    line-height: 1; 
+    padding: 8px 0; 
+}
+
+
+.required-asterisk {
+    color: red;
+    margin-left: 2px;
+}
+
+.form-divider { 
+    border: 0;
+    height: 1px;
+    background-color: #e0e0e0; 
+    margin: 15px 0; 
+    width: 100%; 
+    box-sizing: border-box;
+}
+
+.form-note {
+    font-size: 0.75rem; 
+    color: #6c757d;
+    margin-bottom: 8px; 
+}
+.address-note {
+    margin-top: -8px; 
+    font-style: italic;
+}
+
+
+.alert {
+    padding: 10px 15px; 
+    margin-bottom: 15px; 
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.85rem; 
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert-error ul {
+    margin: 5px 0 0 15px;
+    padding: 0;
+    list-style-type: disc;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.alert-success a {
+    color: #0c5460;
+    font-weight: bold;
+}
+
+.submit-button-group {
+    margin-top: 20px; 
+    text-align: center; 
+    width: 100%; 
+}
+
+.btn-submit {
+    background-color: #0B2A53; 
+    color: white;
+    padding: 10px 25px; 
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem; 
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    width: auto; 
+    min-width: 150px;
+}
+
+.btn-submit:hover {
+    background-color: #081f3a; 
+    transform: translateY(-1px); 
+}
+.btn-submit:active {
+    transform: translateY(0px); 
+}
+
+
+.login-link-text {
+    text-align: center;
+    margin-top: 20px; 
+    font-size: 0.9rem;
+    color: #555;
+    width: 100%; 
+}
+
+.login-link-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+.login-link-text a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 992px) { 
+    .signup-form .form-main-columns-wrapper { /* Corrected class name */
+        flex-direction: column; 
+        gap: 0; 
+    }
+    .signup-form .form-main-column { /* Corrected class name */
+        min-width: 100%; 
+        margin-bottom: 10px; 
+    }
+}
+
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px; 
+        align-items: flex-start; 
+    }
+    .signup-container {
+        margin: 10px;
+        max-height: none; 
+        min-height: auto; 
+        max-width: 100%; 
+    }
+    .form-pane {
+        padding: 15px 20px; 
+    }
+    .form-pane h2 {
+        font-size: 1.5rem; 
+        margin-bottom: 15px;
+    }
+    .signup-form .form-row { /* This targets rows of individual fields */
+        flex-direction: column; 
+        gap: 0; 
+        margin-bottom: 0; 
+    }
+    .signup-form .form-group { /* This targets individual field containers */
+        min-width: 100%; 
+        margin-bottom: 12px; 
+    }
+     .submit-button-group {
+        text-align: center; 
+        margin-top: 20px;
+    }
+    .btn-submit {
+        width: 100%; 
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+    .form-divider {
+        margin: 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-pane {
+        padding: 15px;
+    }
+    .form-pane h2 {
+        font-size: 1.3rem;
+    }
+    .signup-form label {
+        font-size: 0.75rem;
+    }
+    .signup-form input[type="text"],
+    .signup-form input[type="email"],
+    .signup-form input[type="password"],
+    .signup-form input[type="date"],
+    .signup-form select {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+    }
+    .btn-submit {
+        font-size: 0.9rem;
+    }
+}

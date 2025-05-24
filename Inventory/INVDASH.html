@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory</title>
+  <link rel="stylesheet" href="../Stylesheet/Inv/Inventory.css" />
+  <script src="https://kit.fontawesome.com/f543d9f8e5.js" crossorigin="anonymous"></script> </head>
+<body>
+  <div class="sidebar">
+    <div class="icon" id="backBtn" title="Back">
+        <a href="INVDASH.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+            <i class="fa-solid fa-magnifying-glass fa-2x" style="color: #ffffff;"></i>
+        </a>
+    </div>
+    <div class="icon" id="addBtn" title="AddItem">
+        <a href="ADDITEM.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+            <i class="fa-regular fa-square-plus fa-xl" style="color: #ffffff;"></i>
+        </a>
+    </div>
+    <div class="icon" id="archiveLinkIcon" title="Archive Inventory">
+        <a href="ARCHITEM.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+            <i class="fa-solid fa-archive fa-xl" style="color: #ffffff;"></i>
+        </a>
+    </div>
+    <div class="icon" id="notifBtn" title="Notifications">
+        <a href="INVNOTIF.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+            <i class="fa-regular fa-bell fa-xl" style="color: #ffffff;"></i>
+        </a>
+    </div>
+     <div class="icon" title="Logout" style="margin-top: auto; margin-bottom: 10px;"> <a href="../Login/logout.php" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-solid fa-right-from-bracket fa-2x" style="color: #ffffff;"></i>
+      </a>
+    </div>
+  </div>
+
+  <nav>
+    <a href="../Doctor/docDashboard.php">Dashboard</a>
+    <a href="../Doctor/viewAppointments.php">Admission</a>
+    <a href="../Inventory/INVDASH.html" class="active">Inventory</a>
+  </nav>
+  <div class="main">
+    <div class="subtitle-container">
+      <div class="subtitle">
+        <h3>View Inventory</h3>
+        <label for="categoryCmb">Category:</label>
+        <select id="categoryCmb">
+          <option value="">All</option>
+          <option value="Medicine">Medicine</option>
+          <option value="Medical Supplies">Medical Supplies</option>
+          <option value="Medical Equipments">Medical Equipments</option>
+        </select>
+        <label for="campusCmb">Campus:</label>
+        <select id="campusCmb">
+          <option value="">All</option>
+          <option value="1">Elida</option>
+          <option value="2">Marciano</option>
+        </select>
+      </div>
+      <div class="searchNdatetime">
+        <input type="text" id="search-input" placeholder="Search by ID or Name..." class="search-box" />
+        <span class="date-time" id="datetime">Loading...</span>
+      </div>
+    </div>
+    
+
+    <table>
+      <thead>
+        <tr>
+          <th>Inv #</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Dosage</th>
+          <th>Quantity</th>
+          <th>Supply Date</th>
+          <th>Expiry Date</th>
+          <th>Campus</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="inventory-table-body">
+          </tbody>
+    </table>
+  </div>
+
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModalBtn">&times;</span>
+      <h3>Edit Item</h3>
+      <form id="edit-form">
+        <div>
+          <label for="invIDview">Inventory No.:</label>
+          <input type="text" id="invIDview" name="invIDview" readonly />
+        </div>
+        <input type="hidden" id="edit-inv-id" name="inv-id">
+
+        <label for="edit-inv-name">Name:</label>
+        <input type="text" id="edit-inv-name" name="inv-name" required />
+
+        <label for="edit-inv-description">Description:</label>
+        <textarea id="edit-inv-description" name="inv-description"></textarea>
+
+        <label>Category:</label>
+        <div class="radio-group">
+          <label><input type="radio" name="edit-category" value="Medicine" required> Medicine</label>
+          <label><input type="radio" name="edit-category" value="Medical Supplies"> Medical Supplies</label>
+          <label><input type="radio" name="edit-category" value="Medical Equipments"> Medical Equipments</label>
+        </div>
+
+        <label for="edit-inv-dosage">Dosage:</label>
+        <input type="text" id="edit-inv-dosage" name="inv-dosage" />
+
+        <div class="form-group">
+          <div>
+            <label for="edit-inv-quantity">Quantity:</label>
+            <input type="text" id="edit-inv-quantity" name="inv-quantity" required min="0" />
+          </div>
+          <div>
+            <label for="edit-campus">Campus (1 or 2):</label>
+            <input type="number" id="edit-campus" name="edit-campus" placeholder="1(Elida) or 2(Marciano)" min="1" max="2" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div>
+            <label for="edit-supply-date">Supply Date:</label>
+            <input type="date" id="edit-supply-date" name="supply-date" required />
+          </div>
+          <div>
+            <label for="edit-expiry-date">Expiration Date:</label>
+            <input type="date" id="edit-expiry-date" name="expiry-date" />
+          </div>
+        </div>
+
+        <button type="submit" id="saveChangesBtn">Update</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Your existing JavaScript for INVDASH.html functionality
+    // ... (fetchInventory, renderInventoryTable, openEditModal, etc.) ...
+    let currentInventoryItems = [];
+
+    function getTodayDateString() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function autoArchiveExpiredClientSide(items) {
+      const today = getTodayDateString();
+      let refreshNeeded = false;
+
+      console.log("Checking for expired items...");
+
+      items.forEach(item => {
+        if (item.invExpiryDate && item.invExpiryDate < today) {
+          console.log(`Item ID ${item.invID} (${item.invName}) is expired. Archiving item.`);
+          refreshNeeded = true;
+          fetch('moveToArchive.php', { // Assuming moveToArchive.php is in the same directory or correct path
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ inventory_no: item.invID })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              console.log(`Client-side: Item ID ${item.invID} successfully archived via auto-check.`);
+            } else {
+              console.warn(`Client-side: Failed to auto-archive Item ID ${item.invID}. Server message: ${data.message || 'Unknown error'}`);
+            }
+          })
+          .catch(error => {
+            console.error(`Client-side: Error auto-archiving Item ID ${item.invID}:`, error);
+          });
+        }
+      });
+
+      if (refreshNeeded) {
+        console.log("Client-side: Auto-archive attempts made. Refreshing inventory list in 2 seconds.");
+        setTimeout(() => {
+          applyFilters();
+        }, 2000);
+      }
+    }
+
+    function fetchInventory(category = '', searchTerm = '', campus = '') {
+      const params = new URLSearchParams();
+      if (category) params.append('category', category);
+      if (searchTerm) params.append('search', searchTerm);
+      if (campus) params.append('campus', campus);
+
+      fetch(`loadInv.php?${params.toString()}`) // Assuming loadInv.php is in the same directory or correct path
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data) && data.error) {
+            console.error('Error from server (loadInv.php):', data.error, data.details || '');
+            document.getElementById('inventory-table-body').innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Error loading inventory from server.</td></tr>`;
+            currentInventoryItems = [];
+            return;
+          }
+          currentInventoryItems = data;
+          renderInventoryTable(data);
+
+          if (currentInventoryItems.length > 0) {
+            autoArchiveExpiredClientSide(currentInventoryItems);
+          }
+        })
+        .catch(err => {
+          console.error('Fetch Inventory Error:', err);
+          document.getElementById('inventory-table-body').innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Error loading inventory: ${err.message}</td></tr>`;
+        });
+    }
+
+    function renderInventoryTable(items) {
+      const tbody = document.getElementById('inventory-table-body');
+      tbody.innerHTML = '';
+
+      if (!items || !items.length) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">No inventory items found.</td></tr>';
+        return;
+      }
+
+      items.forEach(item => {
+        const row = tbody.insertRow();
+        row.setAttribute('data-id', item.invID);
+
+        row.insertCell().textContent = item.invID || 'N/A';
+        row.insertCell().textContent = item.invName || 'N/A';
+        row.insertCell().textContent = item.invDescription || 'N/A';
+        row.insertCell().textContent = item.invCategory || 'N/A';
+        row.insertCell().textContent = item.invDosage || 'N/A';
+        row.insertCell().textContent = item.itemQuantity || 'N/A';
+        row.insertCell().textContent = item.invSupplyDate || 'N/A';
+        row.insertCell().textContent = item.invExpiryDate || 'N/A';
+        row.insertCell().textContent = item.invCampus || 'N/A'; // Assumes invCampus is the campus name
+
+        const actionsCell = row.insertCell();
+        actionsCell.style.textAlign = 'center';
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'action-btn edit-btn';
+        editBtn.onclick = () => openEditModal(item.invID);
+        actionsCell.appendChild(editBtn);
+
+        const archiveBtnTable = document.createElement('button'); // Changed variable name for clarity
+        archiveBtnTable.textContent = 'Archive';
+        archiveBtnTable.className = 'action-btn archive-btn-table'; // Uses specific class for table archive button
+        archiveBtnTable.onclick = () => archiveItem(item.invID, item.invName);
+        actionsCell.appendChild(archiveBtnTable);
+      });
+    }
+
+    function openEditModal(invID) {
+      const item = currentInventoryItems.find(i => String(i.invID) === String(invID));
+      if (!item) {
+        alert("Item not found for ID: " + invID);
+        return;
+      }
+      document.getElementById('invIDview').value = item.invID;
+      document.getElementById('edit-inv-id').value = item.invID;
+      document.getElementById('edit-inv-name').value = item.invName || '';
+      document.getElementById('edit-inv-description').value = item.invDescription || '';
+      document.getElementById('edit-inv-dosage').value = item.invDosage || '';
+      document.getElementById('edit-inv-quantity').value = item.itemQuantity || '';
+      document.getElementById('edit-campus').value = item.campusID || ''; // Use campusID for the value
+      document.getElementById('edit-supply-date').value = item.invSupplyDate || '';
+      document.getElementById('edit-expiry-date').value = item.invExpiryDate || '';
+      document.getElementById('edit-supply-date').max = getTodayDateString();
+
+      const itemCategoryLower = item.invCategory ? item.invCategory.toLowerCase() : null;
+      document.querySelectorAll('input[name="edit-category"]').forEach(r => {
+        const radioValueLower = r.value.toLowerCase().replace(/s$/, '');
+        const dbCategoryNormalized = itemCategoryLower ? itemCategoryLower.replace(/s$/, '') : null;
+        r.checked = (radioValueLower === dbCategoryNormalized);
+      });
+      handleEditDosageField();
+      document.getElementById('editModal').style.display = 'block';
+    }
+
+    function handleEditDosageField() {
+      const selectedRadio = document.querySelector('input[name="edit-category"]:checked');
+      const dosageInput = document.getElementById('edit-inv-dosage');
+      const expiryDateInput = document.getElementById('edit-expiry-date');
+      if (selectedRadio && selectedRadio.value.toLowerCase().includes('medicine')) {
+        dosageInput.disabled = false;
+        expiryDateInput.required = true;
+      } else {
+        dosageInput.disabled = true;
+        if (!selectedRadio || !selectedRadio.value.toLowerCase().includes('medicine')) {
+            dosageInput.value = '';
+        }
+        expiryDateInput.required = false;
+      }
+    }
+    document.querySelectorAll('input[name="edit-category"]').forEach(radio => {
+      radio.addEventListener('change', handleEditDosageField);
+    });
+
+    function closeModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+    document.getElementById('closeModalBtn').onclick = closeModal;
+    window.onclick = e => {
+      if (e.target == document.getElementById('editModal')) closeModal();
+    };
+
+    document.getElementById('edit-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const invID = document.getElementById('edit-inv-id').value;
+      const invName = document.getElementById('edit-inv-name').value.trim();
+      const invDescription = document.getElementById('edit-inv-description').value.trim();
+      const invCategoryRadio = document.querySelector('input[name="edit-category"]:checked');
+      const invCategory = invCategoryRadio ? invCategoryRadio.value : '';
+      const invDosage = document.getElementById('edit-inv-dosage').value.trim();
+      const itemQuantity = document.getElementById('edit-inv-quantity').value;
+      const campusValueFromForm = document.getElementById('edit-campus').value;
+      const supplyDate = document.getElementById('edit-supply-date').value;
+      const expiryDate = document.getElementById('edit-expiry-date').value;
+      const today = getTodayDateString();
+
+      if (!invName) return alert("Name is required.");
+      if (!invCategoryRadio) return alert("Category is required.");
+      if (supplyDate > today) return alert("Supply date cannot be in the future.");
+      const campusNum = parseInt(campusValueFromForm, 10);
+      if (campusValueFromForm && (isNaN(campusNum) || campusNum < 1 || campusNum > 2)) {
+          alert("Campus must be either 1 (Elida) or 2 (Marciano)."); // Updated alert
+          document.getElementById('edit-campus').focus();
+          return;
+      }
+      if (invCategory.toLowerCase().includes("medicine") && !expiryDate) {
+        return alert("Expiration date is required for Medicine.");
+      }
+      if (expiryDate && expiryDate <= today) {
+        return alert("Expiration Date must be in the future!");
+      }
+      if (expiryDate) {
+        const diffTime = new Date(expiryDate).getTime() - new Date(today).getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays < 10) {
+            if(!confirm(`Warning: The item expiration is ${diffDays} day(s) away. Do you still want to proceed?`)) return;
+        }
+      }
+      if (!confirm("Are you sure you want to update this item?")) return;
+
+      fetch('UpdItem.php', { // Assuming UpdItem.php is in the same directory or correct path
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invID: invID,
+          invName: invName,
+          invDescription: invDescription,
+          invCategory: invCategory,
+          invDosage: invDosage,
+          itemQuantity: itemQuantity,
+          campusID: campusValueFromForm, // Send as 'campusID'
+          invSupplyDate: supplyDate,
+          invExpiryDate: expiryDate
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (data.status === 'success') {
+          alert("Item updated successfully!");
+          closeModal();
+          applyFilters();
+        } else {
+          alert("Update failed: " + (data.message || "Unknown error"));
+        }
+      })
+      .catch(err => {
+        console.error('Update Item Error:', err);
+        alert("Error during update: " . err.message);
+      });
+    });
+
+    function archiveItem(invID, invName) {
+      if (!confirm(`Are you sure you want to archive "${invName}" (ID: ${invID})?`)) return;
+      fetch('moveToArchive.php', { // Assuming moveToArchive.php is in the same directory or correct path
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inventory_no: invID })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (data.status === 'success') {
+          alert("Item archived successfully.");
+          applyFilters();
+        } else {
+          alert("Failed to archive: " + (data.message || "Unknown error"));
+        }
+      })
+      .catch(err => {
+        console.error('Archive Item Error:', err);
+        alert("Error during archiving: " . err.message);
+      });
+    }
+
+    document.getElementById('categoryCmb').onchange = () => applyFilters();
+    document.getElementById('campusCmb').onchange = () => applyFilters();
+    document.getElementById('search-input').oninput = () => applyFilters();
+
+    function applyFilters() {
+      fetchInventory(
+        document.getElementById('categoryCmb').value,
+        document.getElementById('search-input').value.trim(),
+        document.getElementById('campusCmb').value
+      );
+    }
+
+    function updateDateTime() {
+      document.getElementById('datetime').textContent =
+        new Date().toLocaleString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric',
+          hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    fetchInventory();
+
+    // Event listeners for NEW sidebar icons (if their IDs change, update here)
+    // document.getElementById("backBtn").addEventListener("click", () => {
+    //   window.location.href =  "../Doctor/docDashboard.php"; // Example path
+    // });
+    // document.getElementById("addBtn").addEventListener("click", () => {
+    //   window.location.href = "ADDITEM.html"; // Ensure this page exists and path is correct
+    // });
+    // Link for the new archive icon can be added here if it's not just a link in HTML
+    // document.getElementById("archiveLinkIcon").addEventListener("click", () => { // Assuming new ID for archive icon
+    //   window.location.href = "ARCHITEM.html"; // Ensure this page exists and path is correct
+    // });
+    // document.getElementById("notifBtn").addEventListener("click", () => {
+    //   window.location.href = "INVNOTIF.html"; // Ensure this page exists and path is correct
+    // });
+
+    // The JavaScript for the original top-bar archive button (id="archiveBtn") is removed as the button is moved.
+    // The new icon in the sidebar for "Archive Inventory" is now an <a> tag directly linking to ARCHITEM.html.
+    // Similarly for AddItem, Notifications, and Back. If they need JS-driven actions, those would be separate.
+  </script>
+</body>
+</html>

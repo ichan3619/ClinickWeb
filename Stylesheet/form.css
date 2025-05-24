@@ -1,0 +1,106 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f5f5f5;
+}
+.sidebar {
+  width: 80px;
+  background-color: #00a9c9;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+.sidebar i {
+  width: 40px;
+  margin: 20px 0;
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 0;
+  border-radius: 10px;
+}
+
+  .sidebar i:hover{
+    background-color: #2cdcff;
+  }
+
+.sidebar a{
+    text-decoration: none;
+    color: white;
+}
+.main {
+  margin-left: 80px;
+  padding: 80px 20px 20px 20px; /* add top padding for nav height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
+nav {
+  display: flex;
+  gap: 20px;
+  padding: 15px 20px;
+  position: fixed;
+  top: 0;
+  left: 80px; /* leave space for sidebar */
+  right: 0;
+  z-index: 1000;
+}
+
+nav a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+}
+nav a.active {
+  border-bottom: 2px solid black;
+}
+.form-container {
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;  
+}
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.radio-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.submit-btn {
+  background-color: #00a9c9;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+  .submit-btn:hover{
+    background-color: #2cdcff;  
+  }
+#profile {
+  position: absolute;
+  top: 25px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+

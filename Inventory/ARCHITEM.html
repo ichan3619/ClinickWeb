@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Archived Inventory</title>
+  <link rel="stylesheet" href="../Stylesheet/Inv/Archive.css">
+  <script src="https://kit.fontawesome.com/f543d9f8e5.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="icon" title="Active Inventory">
+      <a href="INVDASH.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-solid fa-magnifying-glass fa-xl"></i>
+      </a>
+    </div>
+    <div class="icon" title="Add Item">
+      <a href="ADDITEM.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-regular fa-square-plus fa-xl"></i>
+      </a>
+    </div>
+    <div class="icon" title="Archive Inventory">
+      <a href="ARCHITEM.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-solid fa-archive fa-xl"></i>
+      </a>
+    </div>
+    <div class="icon" title="Notifications">
+      <a href="INVNOTIF.html" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-regular fa-bell fa-xl"></i>
+      </a>
+    </div>
+    <div class="icon" title="History"><i class="fa-solid fa-clock-rotate-left fa-xl"></i></div>
+    <div class="icon" title="User Profile"><i class="fa-solid fa-user fa-xl"></i></div>
+    <div class="icon" title="Logout" style="margin-top:auto; margin-bottom:10px;">
+      <a href="../Login/logout.php" style="color:white; text-decoration:none; display:flex; justify-content:center; align-items:center; width:100%; height:100%;">
+        <i class="fa-solid fa-right-from-bracket fa-2x"></i>
+      </a>
+    </div>
+  </div>
+
+  <nav>
+    <a href="../Doctor/docDashboard.php">Dashboard</a>
+    <a href="../Doctor/viewAppointments.php">Admission</a>
+    <a href="INVDASH.html" class="active">Inventory</a>
+  </nav>
+
+  <div class="main">
+    <div class="datetime" id="datetime">Loading date and time...</div>
+
+    <div class="subtitle-container">
+      <div class="subtitle">
+        <h3>Archived Items</h3>
+        <label for="categoryCmb">Category:</label>
+        <select id="categoryCmb">
+          <option value="">All</option>
+          <option value="Medicine">Medicine</option>
+          <option value="Medical Supplies">Medical Supplies</option>
+          <option value="Medical Equipments">Medical Equipments</option>
+        </select>
+        <label for="campusCmb">Campus:</label>
+        <select id="campusCmb">
+          <option value="">All</option>
+          <option value="1">Elida</option>
+          <option value="2">Marciano</option>
+        </select>
+      </div>
+
+      <div class="searchNdatetime">
+        <input type="text" id="search-input" placeholder="Search by ID or Name..." class="search-box" />
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Inv #</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Dosage</th>
+          <th>Quantity</th>
+          <th>Supply Date</th>
+          <th>Expiry Date</th>
+          <th>Campus</th>
+          <th>Date Archived</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="archived-items-table-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tableBody = document.getElementById("archived-items-table-body");
+      const searchInput = document.getElementById("search-input");
+      const categorySelect = document.getElementById("categoryCmb");
+      const campusSelect = document.getElementById("campusCmb");
+      const datetimeSpan = document.getElementById("datetime");
+
+      function fetchArchivedItems(category = "", searchTerm = "", campus = "") {
+        const params = new URLSearchParams();
+        if (category) params.append('category', category);
+        if (searchTerm) params.append('search', searchTerm);
+        if (campus) params.append('campus', campus);
+
+        fetch(`FetchArch.php?${params.toString()}`)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
+          })
+          .then(data => {
+            tableBody.innerHTML = "";
+            if (!data || data.length === 0) {
+              tableBody.innerHTML = `<tr><td colspan="11" style="text-align:center;">No archived items found.</td></tr>`;
+              return;
+            }
+            data.forEach(item => {
+              const row = tableBody.insertRow();
+              row.insertCell().textContent = item.invID || 'N/A';
+              row.insertCell().textContent = item.invName || 'N/A';
+              row.insertCell().textContent = item.invDescription || 'N/A';
+              row.insertCell().textContent = item.invCategory || 'N/A';
+              row.insertCell().textContent = item.invDosage || 'N/A';
+              row.insertCell().textContent = item.itemQuantity || '0';
+              row.insertCell().textContent = item.invSupplyDate || 'N/A';
+              row.insertCell().textContent = item.invExpiryDate || 'N/A';
+              row.insertCell().textContent = item.invCampus || 'N/A';
+              row.insertCell().textContent = item.archivedTimestamp
+                ? new Date(item.archivedTimestamp).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  }) : 'N/A';
+              const actionsCell = row.insertCell();
+              const restoreBtn = document.createElement("button");
+              restoreBtn.textContent = "Restore";
+              restoreBtn.className = "action-btn restore-btn";
+              restoreBtn.onclick = () => restoreItem(item.invID, item.invName);
+              actionsCell.appendChild(restoreBtn);
+            });
+          })
+          .catch(err => {
+            tableBody.innerHTML = `<tr><td colspan="11" style="text-align:center;color:red;">Error: ${err.message}</td></tr>`;
+          });
+      }
+
+      function restoreItem(invID, invName) {
+        if (!confirm(`Are you sure you want to restore "${invName}" (ID: ${invID})?`)) return;
+        fetch('restoreItem.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ inventory_no: invID })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert(data.message || "Item restored.");
+            applyFilters();
+          } else {
+            alert("Failed to restore item: " + (data.message || "Unknown error."));
+          }
+        })
+        .catch(err => alert("Error during restoration: " + err.message));
+      }
+
+      function applyFilters() {
+        fetchArchivedItems(categorySelect.value, searchInput.value.trim(), campusSelect.value);
+      }
+
+      categorySelect.onchange = applyFilters;
+      campusSelect.onchange = applyFilters;
+      searchInput.oninput = applyFilters;
+
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        };
+        datetimeSpan.textContent = now.toLocaleString('en-US', options);
+      }
+
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+      fetchArchivedItems();
+    });
+  </script>
+</body>
+</html>

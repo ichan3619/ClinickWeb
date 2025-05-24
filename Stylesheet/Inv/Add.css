@@ -1,0 +1,224 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  background-color: #ffffff;
+}
+
+.sidebar {
+      background-color: #00a9c9;
+      width: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      height: 100vh; 
+    }
+
+.sidebar .icon { /* Applied to new icons as well */
+  font-size: 28px; /* Base size, FontAwesome classes can override */
+  color: white;
+  cursor: pointer;
+  width: 50px;   /* Increased width */
+  height: 50px;  /* Increased height */
+  padding: 10px; /* Padding around icon graphic */
+  margin-top: 15px;
+  margin-bottom: 0;
+  border-radius: 10px;
+  display: flex; /* For centering icon inside */
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar .icon:hover {
+  background-color: #2cdcff;
+}
+
+/* NEW NAVIGATION STYLES (copied from INVDASH.css/docDash.css) */
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    position: fixed;
+    top: 0;
+    left: 100px; /* Width of the sidebar */
+    right: 0;
+    height: 50px; /* Fixed height for the nav bar */
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    align-items: center;
+    box-sizing: border-box;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 5px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out;
+}
+
+nav a.active,
+nav a:hover {
+    border-bottom: 2px solid black;
+}
+/* END OF NEW NAVIGATION STYLES */
+
+.main {
+  flex: 1;
+  margin-left: 80px; /* Account for the fixed sidebar width */
+  padding: 20px;
+  padding-top: 70px; /* 50px (nav height) + 20px (original top space) */
+  box-sizing: border-box;
+}
+
+/* REMOVED original .top-bar and .buttons button styles */
+
+/* --- RETAINED ORIGINAL FORM STYLES --- */
+.datetime {
+  background-color: #00a9c9;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  width: fit-content;
+  margin-left: auto;
+  margin-top: 0; /* Adjusted: will now be directly under nav/title */
+  margin-bottom: 20px; /* Added space below it */
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 0; /* Adjusted from -40px as top-bar is gone */
+}
+
+.form-box {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: none; /* Original: none */
+  width: 800px; /* Original width */
+  border: 2px solid #0098a6; /* Original border */
+}
+
+
+.form-box h3 { /* This is the "Add Items" title inside the form box */
+  font-size: 30px;
+  margin-top:3px ;
+  margin-bottom: 10px; /* Original was 10px, can be increased if needed e.g. 20px */
+  color: #0098a6;
+}
+
+/* General rule for form inputs from original Add.css */
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0; /* Original had this general margin */
+  box-sizing: border-box;
+  /* Original Add.css did not define border or border-radius here directly for all these types */
+  /* They might be inheriting or relying on browser defaults if not overridden */
+  border: 1px solid #ccc; /* Added a default border for consistency if not present */
+  border-radius: 4px; /* Added for slight rounding */
+}
+/* Ensuring disabled inputs look distinct */
+input:disabled, input[readonly] {
+    background-color: #e9ecef;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+
+.form-group {
+  margin-bottom: 20px; /* Original spacing */
+}
+/* Remove bottom margin from last form-group inside form-box to prevent double spacing with form-buttons */
+.form-box > .form-group:last-of-type {
+    margin-bottom: 10px;
+}
+
+
+.form-row {
+  display: flex;
+  gap: 10px; /* Original gap */
+}
+
+.form-row > * {
+  flex: 1;
+}
+/* Inputs within form-row will also get margin: 10px 0; from the general rule. */
+/* To avoid double vertical margins with gap, we can refine: */
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row input[type="date"] {
+    margin-top: 0;
+    margin-bottom: 0; /* Rely on form-group's margin-bottom */
+}
+
+
+/* Original .category-options styling */
+.form-group > label { /* For labels like "Category:", "Dosage:" */
+    display: block; /* Make label take its own line */
+    margin-bottom: 5px; /* Space between label and its options/input */
+    font-weight: bold; /* Making these labels bold for clarity */
+}
+.category-options {
+  display: flex;
+  flex-wrap: wrap; /* Allow radio buttons to wrap */
+  gap: 15px; /* Gap between radio options */
+  /* margin: 10px 0; Removed, use .form-group margin */
+  align-items: center;
+  padding-top: 5px; /* Space below the "Category:" label */
+}
+.category-options label { /* Label for each radio button itself */
+    font-weight: normal;
+    margin-right: 10px; /* Keep original spacing */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.category-options input[type="radio"] {
+    margin-right: 5px; /* Original spacing */
+}
+
+/* Original .form-buttons styling */
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px; /* More space before buttons */
+}
+
+.form-buttons button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #0098a6; /* Original color */
+  color: white;
+  border: none; /* Original: none */
+  border-radius: 4px; /* Adding a slight radius for modern feel, original had none for these */
+  font-weight: 500; /* Good practice */
+  transition: background-color 0.2s;
+}
+
+.form-buttons button:hover {
+  background-color: #006f74; /* Original hover color */
+}
+
+/* Original .form-label-row styling */
+.form-label-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px; /* Original negative margin to pull inputs up */
+  margin-top: 10px; /* Added some space before these paired labels */
+}
+
+.form-label-row label {
+  flex: 1;
+  font-weight: normal; /* Assuming original labels were not bold */
+  font-size: 0.9em;  /* Making them slightly smaller than main labels */
+  color: #555;
+}
